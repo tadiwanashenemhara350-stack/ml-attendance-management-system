@@ -6,21 +6,22 @@ RUN npm ci --legacy-peer-deps
 COPY frontend/ ./
 RUN npm run build
 
-FROM python:3.12-slim
+FROM python:3.10-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=10000
+        PORT=10000
 
-WORKDIR /app
+        WORKDIR /app
 
-COPY backend/requirements.txt ./backend/requirements.txt
-RUN pip install --no-cache-dir -r ./backend/requirements.txt
+        COPY backend/requirements.txt ./backend/requirements.txt
+        RUN pip install --no-cache-dir -r ./backend/requirements.txt
 
-COPY backend/ ./backend/
-COPY --from=frontend-build /app/frontend/dist ./frontend/dist
-COPY --from=frontend-build /app/frontend/public ./frontend/public
+        COPY backend/ ./backend/
+        COPY --from=frontend-build /app/frontend/dist ./frontend/dist
+        COPY --from=frontend-build /app/frontend/public ./frontend/public
 
-EXPOSE 10000
+        EXPOSE 10000
 
-CMD ["sh", "-c", "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+        CMD ["sh", "-c", "cd /app/backend && uvicorn main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+        
