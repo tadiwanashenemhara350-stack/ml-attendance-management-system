@@ -19,6 +19,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
         COPY backend/ ./backend/
         RUN python backend/ml/train_model.py
+        RUN FORCE_RESEED=true python backend/ml/seed_system.py
         COPY --from=frontend-build /app/frontend/dist ./frontend/dist
         COPY --from=frontend-build /app/frontend/public ./frontend/public
 
