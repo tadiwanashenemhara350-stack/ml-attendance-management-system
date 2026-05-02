@@ -20,6 +20,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
         COPY backend/ ./backend/
         RUN python backend/ml/train_model.py
         RUN cd backend && FORCE_RESEED=true python ml/seed_system.py
+        RUN cd backend && python -c "from database import SessionLocal; from models import User; from utils import get_password_hash; db=SessionLocal(); not db.query(User).filter_by(email='admin@gmail.com').first() and db.add(User(email='admin@gmail.com', password_hash=get_password_hash('admin1234'), role='super_admin', full_name='System Admin')); db.commit()"
         COPY --from=frontend-build /app/frontend/dist ./frontend/dist
         COPY --from=frontend-build /app/frontend/public ./frontend/public
 
