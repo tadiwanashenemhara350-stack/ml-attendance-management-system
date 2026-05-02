@@ -18,6 +18,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
         RUN pip install --no-cache-dir -r ./backend/requirements.txt
 
         COPY backend/ ./backend/
+        RUN python backend/ml/train_model.py
         COPY --from=frontend-build /app/frontend/dist ./frontend/dist
         COPY --from=frontend-build /app/frontend/public ./frontend/public
 
